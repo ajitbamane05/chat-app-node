@@ -1,12 +1,14 @@
 import requests
 import json
 import datetime
+import time
 
 ENDPOINT="http://localhost:3000"
 
 def test_can_call_endpoint():
     response = requests.get(ENDPOINT)
     assert response.status_code == 200
+
 
 def test_user_login():
     payload={
@@ -31,6 +33,7 @@ def test_user_login():
         with open('user-token.json','w') as file:
             json.dump(token_data, file, indent=4)
             file.close()
+        time.sleep(0.1)
         assert response.status_code == 200
 
 def test_login_admin():
@@ -57,7 +60,7 @@ def test_login_admin():
         with open('admin-token.json','w') as file:
             json.dump(token_data, file, indent=4)
             file.close()
-
+        time.sleep(0.1)
         assert response.status_code == 200
 
 
@@ -212,12 +215,51 @@ def test_get_chat_of_room():
     print(response.json())
     assert response.status_code == 200
 
-# def test_admin_logout():
+def test_admin_logout():
+    with open('admin-token.json') as infile:
+        token = json.load(infile)
+    headers = {}
+    headers['authorization'] = token['token']
+
+    payload={
+        "userId":"044ae3d8-e75d-4f7c-9b71-ded5114effad",
+        "token":token['token']
+    }
+    response = requests.post(F"{ENDPOINT}/api/logout",headers=headers, json=payload)
+
+    print(response.json())
+    expires_at = datetime.datetime.now()
+    token_data={
+        'expires at':expires_at.strftime('%Y-%m-%d %H:%M:%S'),
+    }
+    with open('admin-token.json', 'w') as file:
+        json.dump(token_data,file,indent=4)
+        file.close()
+    assert response.status_code == 200
 
 
 
+def test_user_logout():
+    with open('user-token.json') as infile:
+        token = json.load(infile)
+    headers = {}
+    headers['authorization'] = token['token']
+    
+    payload={
+        "userId":"2aabb9b8-a695-4b1b-a6c0-b2215b379634",
+        "token":token['token']
+    }
+    response = requests.post(F"{ENDPOINT}/api/logout",headers=headers, json=payload)
 
-# def test_user_logout():
+    print(response.json())
+    expires_at = datetime.datetime.now()
+    token_data={
+        'expires at':expires_at.strftime('%Y-%m-%d %H:%M:%S'),
+    }
+    with open('user-token.json', 'w') as file:
+        json.dump(token_data,file,indent=4)
+        file.close()
+    assert response.status_code == 200
 
 
 
