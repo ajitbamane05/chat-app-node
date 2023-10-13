@@ -9,6 +9,7 @@ router.post('/createdirectroom',Authentication.checkIfAuthenticated,RoomHandler.
 router.post('/createroom', Authentication.checkIfAuthenticated,Authorised.checkIfAuthorised, RoomHandler.creteRoom);
 router.post('/deleteroom', Authentication.checkIfAuthenticated, Authorised.checkIfAuthorised, RoomHandler.deleteRoom);
 router.post('/getmembership', Authentication.checkIfAuthenticated, RoomMemberHandler.getMemberships);
-
+router.post('/addroommember',Authentication.checkIfAuthenticated,Authorised.checkIfAuthorised,RoomMemberHandler.addRoomMember)
+router.post('/removeroommember',Authentication.checkIfAuthenticated,Authorised.checkIfAuthorised,RoomMemberHandler.removeRoomMember)
 
 module.exports = router;

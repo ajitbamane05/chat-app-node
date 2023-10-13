@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient()
-
+const prisma = require('../prisma-client')
 function createRoomMembers(memberIds, roomId) {
     return prisma.roomMember.createMany({
         data: [
@@ -31,7 +29,14 @@ function getMemberships(userId) {
                 include: {
                     members: {
                         include: {
-                            user: true
+                            user: {
+                                select: {
+                                    user_id: true,
+                                    username: true,
+                                    email: true,
+                                    isAdmin: true
+                                }
+                            }
                         }
                     }
                 }
@@ -57,4 +62,26 @@ function deleteRoomMembers(roomId) {
     })
 }
 
-module.exports = { getMemberships, deleteMemberships, createRoomMembers, createRoomAdmin, deleteRoomMembers }
+function addRoomMember(userId, roomId) {
+    return prisma.roomMember.create({
+        data: {
+            userId: userId,
+            roomId: roomId
+        }
+    })
+}
+
+function removeRoomMember(userId, roomId) {
+    return prisma.roomMember.deleteMany({
+        where: {
+            userId: userId,
+            roomId: roomId
+        }
+    })
+}
+
+module.exports = {
+    getMemberships, deleteMemberships,
+    createRoomMembers, createRoomAdmin, deleteRoomMembers,
+    addRoomMember,removeRoomMember
+}
