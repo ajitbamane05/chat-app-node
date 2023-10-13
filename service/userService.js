@@ -27,8 +27,14 @@ async function createAdmin(username, email, password) {
     return UserAccessor.createAdmin(username, email, hashedPassword)
 }
 
-function deleteUser(username) {
-    return UserAccessor.deleteUser(username)
+async function deleteUser(username) {
+    const userExists = await UserAccessor.findByUsername(username)
+    if(userExists){
+        return UserAccessor.deleteUser(username)
+    }
+    else{
+        return { statusCode: 400, message: "User not exists with the given username!" }
+    }
 }
 
 

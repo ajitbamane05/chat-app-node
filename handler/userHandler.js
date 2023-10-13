@@ -16,7 +16,7 @@ async function createNewUser(req, res) {
     try {
         const user = await UserService.createNewUser(username, email, password)
         if (user.statusCode === 400) {
-            return res.status(user.statusCode).json(user.message)
+            return res.status(user.statusCode).json({message:user.message})
         }
         return res.status(200).json({ message: "User created successfully.", user })
     }
@@ -41,7 +41,7 @@ async function createAdmin(req, res) {
     try {
         const user = await UserService.createAdmin(username, email, password)
         if (user.statusCode === 400) {
-            return res.status(user.statusCode).json(user.message)
+            return res.status(user.statusCode).json({message:user.message})
         }
         return res.status(200).json({ message: "Admin created successfully.", user })
     }
@@ -65,6 +65,9 @@ async function deleteUser(req, res) {
         const deleteMemberships = await RoomMemberService.deleteMemberships(user_id)
 
         const deletedUser = await UserService.deleteUser(username)
+        if(deletedUser.statusCode==400){
+            return res.status(deletedUser.statusCode).json({message:deletedUser.message})
+        }
         return res.status(200).json({ message: "User deleted successfully", deletedUser })
     }
     catch (error) {
