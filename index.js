@@ -9,7 +9,8 @@ const roomRoutes = require('./routes/roomRoutes.js');
 app.use(express.json())
 const crosOptions = {
     origin:'http://localhost:3001',
-    optionsSuccessStatus: 200
+    optionsSuccessStatus: 200,
+    exposedHeaders: ['Authorization']
 }
 app.use(cors(crosOptions));
 
