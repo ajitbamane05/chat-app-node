@@ -1,4 +1,4 @@
-const MessageAccessor = require('../accessor/messageAccessor')
+const {MessageAccessor} = require('../accessor')
 function sendMessage(content,senderId,roomId){
     return MessageAccessor.sendMessage(content,senderId,roomId)
 }
