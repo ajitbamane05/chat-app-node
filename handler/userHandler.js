@@ -76,8 +76,18 @@ async function deleteUser(req, res) {
 
 }
 
+async function getAllUsers(req,res){
+    try{
+        const users = await UserService.getAllUsers()
+        return res.status(200).json(users)
+    }
+    catch(error){
+        return res.status(400).json({message:"Error while fetching data!"})
+    }
+}
+
 
 
 module.exports = {
-    createNewUser, createAdmin, deleteUser
+    createNewUser, createAdmin, deleteUser,getAllUsers
 }

@@ -32,13 +32,25 @@ function findByUsername(username) {
     })
 }
 function findByEmail(email) {
-     return prisma.user.findUnique({
+    return prisma.user.findUnique({
         where: {
             email
         }
     })
 }
 
+function getAllUsers() {
+    return prisma.user.findMany({
+        select: {
+            user_id: true,
+            username: true,
+            email: true,
+            isAdmin: true,
+            createdAt: true
+        }
+    })
+}
+
 module.exports = {
-    createNewUser, createAdmin, deleteUser, findByUsername,findByEmail
+    createNewUser, createAdmin, deleteUser, findByUsername, findByEmail, getAllUsers
 }

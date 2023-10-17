@@ -62,10 +62,8 @@ async function deleteRoom(req, res) {
         return res.status(400).json({ message: "No room id given!" })
     }
     try {
-        const deletedRoomMessages = await MessageService.deleteRoomMessages(room_id)
-
-        const deleteRoomMembers = await RoomMemberService.deleteRoomMembers(room_id)
-
+        const [deletedRoomMessages,deleteRoomMembers] = await Promise.all([MessageService.deleteRoomMessages(room_id),
+            RoomMemberService.deleteRoomMembers(room_id)])
         const deletedRoom = await RoomService.deleteRoom(room_id)
         return res.status(200).json({ message: "Room Deleted with room messages and room members!", deletedRoom })
     }

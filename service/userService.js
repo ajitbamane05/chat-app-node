@@ -37,7 +37,10 @@ async function deleteUser(username) {
     }
 }
 
+function getAllUsers(){
+    return UserAccessor.getAllUsers()
+}
 
 module.exports = {
-    createNewUser, createAdmin, deleteUser
+    createNewUser, createAdmin, deleteUser,getAllUsers
 }
